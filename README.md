@@ -90,8 +90,8 @@ We use **MSU Mobile Face Spoofing Database (MSU-MFSD)**, which contains:
 (These help show what the model sees.)
 
 <p align="center">
-  <img src="figures/live_example.png" width="420"/>
-  <img src="figures/spoof_example.png" width="420"/>
+  <img src="figures/live_example.jpg" width="420"/>
+  <img src="figures/spoof_example.jpg" width="420"/>
 </p>
 
 ### Frequency Cue (RGB + Laplacian)
@@ -99,7 +99,7 @@ We add a Laplacian map as a 4th channel to highlight high-frequency texture/edge
 that often differ between real skin and spoof media.
 
 <p align="center">
-  <img src="figures/frequency_cue.png" width="750"/>
+  <img src="figures/frequency_cue.jpg" width="750"/>
 </p>
 
 ### Score histogram (test videos)
@@ -124,14 +124,3 @@ train identities ≠ dev identities ≠ test identities.
 
 ---
 
-## Environment Setup
-
-Recommended: Python 3.10+
-
-Install dependencies:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -U pip
-pip install -r requirements.txt
