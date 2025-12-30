@@ -119,8 +119,79 @@ This plot is a strong “visual proof” that the model separates spoof vs live 
   - choose threshold (EER / min-ACER / APCER constraint)
 - **Test:** final evaluation only (never used for tuning)
 
+---
+
 We use a **subject-disjoint protocol** to prevent identity leakage:
 train identities ≠ dev identities ≠ test identities.
 
 ---
+
+## How to Run (End-to-End)
+### 1) Prepare data (decode → crop → sample → split)
+This step creates:
+- frame folders
+- split CSVs:
+  - train_frames.csv, dev_frames.csv, test_frames.csv
+  - train_videos.csv, dev_videos.csv, test_videos.csv
+
+Run:
+```bash
+python3 src/prepare_msu.py --data_root /path/to/MSU-MFSD --work_root data/work --k_frames 8
+```
+
+### 2. Train Baseline (RGB only)
+```bash
+python3 src/train_msu.py --work_root data/work --epochs 8 --batch_size 32
+```
+Saves best checkpoint to something like:
+```bash
+runs/msu_rgb_best.pt
+```
+### 3. Train Proposed (RGB + Laplacian frequency cue)
+```bash
+python3 src/train_msu.py --work_root data/work --epochs 8 --batch_size 32 --use_freq
+```
+Saves best checkpoint to something like:
+```bash
+runs/msu_rgbfreq_best.pt
+```
+### 4. Evaluate (video-level metrics)
+#### Baseline:
+```bash
+python3 src/eval_msu.py --work_root data/work --ckpt runs/msu_rgb_best.pt --max_apcer 0.01
+```
+#### Frequency cue model:
+```bash
+python3 src/eval_msu.py --work_root data/work --ckpt runs/msu_rgbfreq_best.pt --max_apcer 0.01
+```
+
+This prints:
+- threshold chosen on dev (EER / min-ACER / APCER constrained)
+- test APCER, BPCER, ACER, accuracy
+
+## Results (Video-Level)
+Below are the main outcomes from our final runs.
+
+### Model A: RGB Baseline
+- APCER: 0.0083
+- BPCER: 0.0500
+- ACER: 0.0292
+- Accuracy: 0.9813
+
+** Interpretation: ** Strong overall balance. Very low attack acceptance rate, and small genuine rejection.
+
+### Model B: RGB + Laplacian Frequency Cue
+- APCER: 0.0000
+- BPCER: 0.1000
+- ACER: 0.0500
+- Accuracy: 0.9750
+
+** Interpretation: ** More secure (no attacks accepted), but stricter on genuine users (higher BPCER).
+This demonstrates the real PAD tradeoff: security vs usability.
+
+## Notes / Practical Observations
+- Decoding warnings (e.g., ProRes “wrong slice data size”) happened occasionally. We handled this by skipping those frames/videos instead of crashing the pipeline.
+- We evaluated at the video level because that is the realistic PAD use case.
+
+- The histogram plot helps confirm that spoof scores cluster near 0 and live scores cluster near 1, making threshold selection meaningful.
 
