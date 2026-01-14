@@ -192,6 +192,8 @@ This demonstrates the real PAD tradeoff: security vs usability.
 ## Notes / Practical Observations
 - Decoding warnings (e.g., ProRes “wrong slice data size”) happened occasionally. We handled this by skipping those frames/videos instead of crashing the pipeline.
 - We evaluated at the video level because that is the realistic PAD use case.
-
 - The histogram plot helps confirm that spoof scores cluster near 0 and live scores cluster near 1, making threshold selection meaningful.
 
+## References / Citation
+- MSU Mobile Face Spoofing Database (MSU-MFSD)
+- MobileNetV2: Sandler et al., Inverted Residuals and Linear Bottlenecks
