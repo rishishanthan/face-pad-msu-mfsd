@@ -45,7 +45,7 @@ We use **MSU Mobile Face Spoofing Database (MSU-MFSD)**, which contains:
 ## Pipeline Overview (End-to-End)
 
 <p align="center">
-  <img src="figures/pipeline.png" width="900"/>
+  <img src="figures/Pipeline.png" width="900"/>
 </p>
 
 ### Step-by-step:
